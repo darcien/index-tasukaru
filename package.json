@@ -1,0 +1,44 @@
+{
+  "name": "index-tasukaru",
+  "description": "Generate index file from CLI.",
+  "version": "0.0.1",
+  "preferGlobal": true,
+  "bin": {
+    "index-tasukaru": "bin/index-tasukaru.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darcien/index-tasukaru.git"
+  },
+  "author": {
+    "name": "Yosua Ian Sebastian",
+    "email": "mail@darcien.dev",
+    "url": "https://darcien.dev"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/darcien/index-tasukaru/issues"
+  },
+  "homepage": "https://github.com/darcien/index-tasukaru#readme",
+  "devDependencies": {
+    "@types/minimist": "^1.2.0",
+    "@types/node": "~10.17.28",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "minimist": "^1.2.5"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "README.md"
+  ]
+}
