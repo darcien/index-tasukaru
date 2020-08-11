@@ -47,7 +47,7 @@ export async function main() {
 
   let matchedFiles = files
     // Skip dotfiles and target file
-    .filter((f) => !!getExportName(f) || f === targetIndex)
+    .filter((f) => !!getExportName(f) && f !== targetIndex)
     .filter((f) => matchExts(sourceExts, f));
 
   if (!matchedFiles.length) {
