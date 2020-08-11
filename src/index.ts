@@ -46,10 +46,19 @@ export async function main() {
     .filter((f) => !!getExportName(f) || f === targetIndex)
     .filter((f) => matchExts(sourceExts, f));
 
+  if (!matchedFiles.length) {
+    exitWithError(`No files matched.`, 2);
+  }
+
   let indexLines = matchedFiles.map(getExportDefaultFromLine);
   let indexSource = indexLines.join('\n');
 
   await fs.writeFile(targetIndexPath, indexSource + '\n');
+  echo(`Finished exporting ${matchedFiles.length} file(s).`);
+}
+
+function echo(message: string) {
+  console.log(message);
 }
 
 function exitWithError(message: string, code: number) {
