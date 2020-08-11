@@ -41,6 +41,7 @@
   "files": [
     "bin",
     "lib",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ]
 }
