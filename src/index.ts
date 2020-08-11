@@ -14,12 +14,16 @@ import minimist from 'minimist';
 
 export async function main() {
   let argv = minimist(process.argv.slice(2), {
-    boolean: ['f'],
+    boolean: ['f', 'version'],
     string: ['sourceExts'],
     default: {
       sourceExts: 'js,ts',
     },
   });
+
+  if (argv.version) {
+    exit(`${(await getPackageJson()).version}`);
+  }
 
   let targetDir = argv._[0] ?? '.';
   let workDir = path.join(process.cwd(), targetDir);
@@ -61,6 +65,11 @@ function echo(message: string) {
   console.log(message);
 }
 
+function exit(message?: string) {
+  message && console.log(message);
+  process.exit(0);
+}
+
 function exitWithError(message: string, code: number) {
   console.error(`Error: ${message}`);
   process.exit(code);
@@ -88,4 +97,12 @@ function splitSourceExtsArg(sourceExtsArg: string) {
 
 function matchExts(exts: Array<string>, filePath: string) {
   return exts.some((ext) => filePath.endsWith(ext));
+}
+
+async function getPackageJson() {
+  let config = await fs.readFile(
+    path.join(__dirname, '../package.json'),
+    'utf-8',
+  );
+  return JSON.parse(config);
 }
