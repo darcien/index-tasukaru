@@ -1,7 +1,7 @@
 {
   "name": "index-tasukaru",
   "description": "Generate index file from CLI.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "preferGlobal": true,
   "bin": {
     "index-tasukaru": "bin/index-tasukaru.js"
@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "rm -rf lib/ && yarn build"
   },
   "repository": {
     "type": "git",
