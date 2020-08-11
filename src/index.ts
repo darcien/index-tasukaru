@@ -42,8 +42,8 @@ export async function main() {
   let sourceExts = splitSourceExtsArg(String(argv.sourceExts).trim());
 
   let matchedFiles = files
-    // Skip dotfiles
-    .filter((f) => !!getExportName(f))
+    // Skip dotfiles and target file
+    .filter((f) => !!getExportName(f) || f === targetIndex)
     .filter((f) => matchExts(sourceExts, f));
 
   let indexLines = matchedFiles.map(getExportDefaultFromLine);
