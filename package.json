@@ -44,5 +44,11 @@
     "lib",
     "README.md",
     "LICENSE"
+  ],
+  "keywords": [
+    "cli",
+    "utility",
+    "helper",
+    "index"
   ]
 }
