@@ -26,11 +26,13 @@
   },
   "homepage": "https://github.com/darcien/index-tasukaru#readme",
   "devDependencies": {
+    "@types/fs-extra": "^9.0.1",
     "@types/minimist": "^1.2.0",
     "@types/node": "~10.17.28",
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "fs-extra": "^9.0.1",
     "minimist": "^1.2.5"
   },
   "engines": {
