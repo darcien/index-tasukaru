@@ -10,6 +10,7 @@ import minimist from 'minimist';
 // TODO: case insensitive
 // TODO: add tests
 // TODO: allow targetting .js
+// TODO: add help or manual
 
 export async function main() {
   let argv = minimist(process.argv.slice(2), {
@@ -31,6 +32,7 @@ export async function main() {
 
   let force = Boolean(argv.f);
   if (!force && files.includes(targetIndex)) {
+    // TODO: Add confirmation instead of exit.
     exitWithError(
       `\`${targetIndexPathRelative}\` already exist.\nUse -f to force writing the index file.`,
       1,
