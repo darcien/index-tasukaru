@@ -7,7 +7,6 @@ import minimist from 'minimist';
 // TODO: support other than default export
 // TODO: support multiple paths
 // TODO: support custom output
-// TODO: case insensitive
 // TODO: add tests
 // TODO: allow targetting .js
 // TODO: add help or manual
@@ -92,11 +91,11 @@ function getExportDefaultFromLine(fileName: string) {
 }
 
 function splitSourceExtsArg(sourceExtsArg: string) {
-  return sourceExtsArg.split(',').map((ext) => ext.trim());
+  return sourceExtsArg.split(',').map((ext) => ext.trim().toLowerCase());
 }
 
 function matchExts(exts: Array<string>, filePath: string) {
-  return exts.some((ext) => filePath.endsWith(ext));
+  return exts.some((ext) => filePath.toLowerCase().endsWith(ext));
 }
 
 async function getPackageJson() {
