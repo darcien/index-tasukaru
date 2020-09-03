@@ -25,24 +25,34 @@ export async function main() {
   }
 
   let targetDir = argv._[0] ?? '.';
-  let workDir = path.join(process.cwd(), targetDir);
 
+  let matchedFiles = await writeIndexForDir(
+    targetDir,
+    splitSourceExtsArg(String(argv.sourceExts).trim()),
+    Boolean(argv.f),
+  );
+
+  echo(`Finished exporting ${matchedFiles.length} file(s).`);
+}
+
+async function writeIndexForDir(
+  targetDir: string,
+  sourceExts: Array<string>,
+  force: boolean,
+) {
+  let workDir = path.join(process.cwd(), targetDir);
   let files = await fs.readdir(workDir);
 
   let targetIndex = 'index.ts';
   let targetIndexPath = path.join(workDir, targetIndex);
   let targetIndexPathRelative = path.join(targetDir, targetIndex);
 
-  let force = Boolean(argv.f);
   if (!force && files.includes(targetIndex)) {
-    // TODO: Add confirmation instead of exit.
     exitWithError(
       `\`${targetIndexPathRelative}\` already exist.\nUse -f to force writing the index file.`,
       1,
     );
   }
-
-  let sourceExts = splitSourceExtsArg(String(argv.sourceExts).trim());
 
   let matchedFiles = files
     // Skip dotfiles and target file
@@ -57,7 +67,7 @@ export async function main() {
   let indexSource = indexLines.join('\n');
 
   await fs.writeFile(targetIndexPath, indexSource + '\n');
-  echo(`Finished exporting ${matchedFiles.length} file(s).`);
+  return matchedFiles;
 }
 
 function echo(message: string) {
