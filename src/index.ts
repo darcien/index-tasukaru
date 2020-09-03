@@ -119,9 +119,5 @@ function matchExts(exts: Array<string>, filePath: string) {
 }
 
 async function getPackageJson() {
-  let config = await fs.readFile(
-    path.join(__dirname, '../package.json'),
-    'utf-8',
-  );
-  return JSON.parse(config);
+  return fs.readJson(path.join(__dirname, '../package.json'));
 }
