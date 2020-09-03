@@ -41,7 +41,17 @@ async function writeIndexForDir(
   force: boolean,
 ) {
   let workDir = path.join(process.cwd(), targetDir);
-  let files = await fs.readdir(workDir);
+
+  let files: Array<string> = [];
+  try {
+    files = await fs.readdir(workDir);
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      exitWithError(`\`${targetDir}\` directory does not exist.`, 3);
+    } else {
+      exitWithError(`Failed to read \`${targetDir}\`.`, 4);
+    }
+  }
 
   let targetIndex = 'index.ts';
   let targetIndexPath = path.join(workDir, targetIndex);
