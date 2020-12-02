@@ -4,7 +4,6 @@ import fs from 'fs-extra';
 import minimist from 'minimist';
 
 // TODO: support -r for recursive
-// TODO: support other than default export
 // TODO: support multiple paths
 // TODO: support custom output
 // TODO: add tests
@@ -14,9 +13,10 @@ import minimist from 'minimist';
 export async function main() {
   let argv = minimist(process.argv.slice(2), {
     boolean: ['f', 'version'],
-    string: ['sourceExts'],
+    string: ['sourceExts', 'exportType'],
     default: {
       sourceExts: 'js,ts',
+      exportType: 'defaultAs',
     },
   });
 
@@ -26,20 +26,23 @@ export async function main() {
 
   let targetDir = argv._[0] ?? '.';
 
-  let matchedFiles = await writeIndexForDir(
+  let matchedFiles = await writeIndexForDir({
     targetDir,
-    splitSourceExtsArg(String(argv.sourceExts).trim()),
-    Boolean(argv.f),
-  );
+    sourceExts: splitSourceExtsArg(String(argv.sourceExts).trim()),
+    force: Boolean(argv.f),
+    exportType: String(argv.exportType),
+  });
 
   echo(`Finished exporting ${matchedFiles.length} file(s).`);
 }
 
-async function writeIndexForDir(
-  targetDir: string,
-  sourceExts: Array<string>,
-  force: boolean,
-) {
+async function writeIndexForDir(input: {
+  targetDir: string;
+  sourceExts: Array<string>;
+  force: boolean;
+  exportType: string;
+}) {
+  let {targetDir, sourceExts, force, exportType} = input;
   let workDir = path.join(process.cwd(), targetDir);
 
   let files: Array<string> = [];
@@ -73,7 +76,12 @@ async function writeIndexForDir(
     exitWithError(`No files matched.`, 2);
   }
 
-  let indexLines = matchedFiles.map(getExportDefaultFromLine);
+  let useExportStar = exportType === 'star';
+  let indexLines = matchedFiles.map(
+    useExportStar
+      ? getExportStarLineFromFileName
+      : getExportDefaultAsFromFileName,
+  );
   let indexSource = indexLines.join('\n');
 
   await fs.writeFile(targetIndexPath, indexSource + '\n');
@@ -104,10 +112,14 @@ function getExportName(fileName: string) {
   return fileName.split('.')[0];
 }
 
-function getExportDefaultFromLine(fileName: string) {
+function getExportDefaultAsFromFileName(fileName: string) {
   return `export { default as ${getExportName(
     fileName,
   )} } from '${getModuleName(fileName)}';`;
+}
+
+function getExportStarLineFromFileName(fileName: string) {
+  return `export * from '${getModuleName(fileName)}';`;
 }
 
 function splitSourceExtsArg(sourceExtsArg: string) {
