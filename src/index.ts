@@ -16,7 +16,7 @@ export async function main() {
     string: ['sourceExts', 'exportType'],
     default: {
       sourceExts: 'js,ts',
-      exportType: 'defaultAs',
+      exportType: 'star',
     },
   });
 
